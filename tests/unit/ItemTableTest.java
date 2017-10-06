@@ -44,4 +44,20 @@ public class ItemTableTest {
 		assertEquals(false, itemTable.lookup("9781442668584","0"));
 		assertEquals(false, itemTable.lookup("978144266858","1"));
 	}
+	
+	@Test
+	public void createItemPass() {
+		List<Item> itemList = itemTable.getItemTable();
+		assertEquals(true, itemTable.createitem("9781442668584"));
+		String ISBN = itemList.get(itemList.size()-1).getISBN();
+		assertEquals("9781442668584", ISBN);
+		assertEquals(true, itemTable.createitem("9781317594277"));
+		ISBN = itemList.get(itemList.size()-1).getISBN();
+		assertEquals("9781317594277", ISBN);
+	}
+	
+	@Test
+	public void createItemFail() {
+		assertEquals(false, itemTable.createitem("9781442668585"));
+	}
 }
