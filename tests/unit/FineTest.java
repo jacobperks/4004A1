@@ -25,7 +25,7 @@ public class FineTest {
 	}
 	
 	@Test
-	public void userSettersTest() {
+	public void fineSettersTest() {
 		fine.setUserid(1);
 		fine.setFee(10);
 		int id = fine.getUserid();
