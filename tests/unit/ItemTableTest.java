@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import server.logic.tables.ItemTable;
+import server.logic.tables.TitleTable;
 import server.logic.model.Item;
 
 public class ItemTableTest {
@@ -59,5 +60,18 @@ public class ItemTableTest {
 	@Test
 	public void createItemFail() {
 		assertEquals(false, itemTable.createitem("9781442668585"));
+	}
+	
+	@Test
+	public void deleteAllTest() {
+		TitleTable titleTable = TitleTable.getInstance();
+		for (int i = 0; i < titleTable.getTitleTable().size(); i++) {
+			String isbn = titleTable.getTitleTable().get(i).getISBN();
+			itemTable.deleteAll(isbn);
+		}
+		for (int i = 0; i < itemTable.getItemTable().size(); i++) {
+			assertEquals("N/A", itemTable.getItemTable().get(i).getISBN());
+			assertEquals("N/A", itemTable.getItemTable().get(i).getCopynumber());
+		}
 	}
 }

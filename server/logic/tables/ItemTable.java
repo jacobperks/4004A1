@@ -63,6 +63,15 @@ public class ItemTable {
 		return result;
 	}
 	
+	public void deleteAll(String string) {
+		for(int i=0;i<itemList.size();i++){
+			if(string.equalsIgnoreCase(itemList.get(i).getISBN())){
+				itemList.get(i).setISBN("N/A");
+				itemList.get(i).setCopynumber("N/A");
+			}
+		}
+	}
+	
 	public List<Item> getItemTable() {
 		return itemList;
 	}
