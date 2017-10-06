@@ -50,5 +50,19 @@ public class LoanTableTest {
 		assertEquals(true, loanTable.checkLoan("9781442668584", "2"));
 		assertEquals(true, loanTable.checkLoan("9781442616898", "1"));
 	}
+	
+	@Test
+	public void checkLoanOneParamTestFail() {
+		List<Loan> loanListActual = loanTable.getLoanTable();
+		for (int i =0; i <loanListActual.size();i++) {
+			String isbn = loanTable.getLoanTable().get(i).getIsbn();
+			assertEquals(false, loanTable.checkLoan(isbn));
+		}
+	}
+	
+	@Test
+	public void checkLoanOneParamTestPass() {
+		assertEquals(true, loanTable.checkLoan("9781442616898"));
+	}
 
 }
