@@ -42,5 +42,23 @@ public class TitleTableTest {
 	public void lookupTestFail() {
 		assertEquals(false, titleTable.lookup("978144266858"));
 	}
+	
+	@Test
+	public void createTitlePass() {
+		assertEquals(true, titleTable.createtitle("9780736692427", "Animal Farm"));
+		List<Title> titleListActual = titleTable.getTitleTable();
+		assertEquals("9780736692427", titleListActual.get(titleListActual.size()-1).getISBN());
+		assertEquals("Animal Farm", titleListActual.get(titleListActual.size()-1).getBooktitle());
+	}
+	
+	@Test
+	public void createTitleFail() {
+		List<Title> titleList = titleTable.getTitleTable();
+		for (int i = 0; i < titleList.size(); i++){
+			String isbn = titleList.get(i).getISBN();
+			String booktitle = titleList.get(i).getBooktitle();
+			assertEquals(false, titleTable.createtitle(isbn, booktitle));
+		}
+	}
 
 }
