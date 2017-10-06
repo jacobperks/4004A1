@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import server.logic.tables.ItemTable;
+import server.logic.tables.LoanTable;
 import server.logic.tables.TitleTable;
 import server.logic.model.Item;
 
@@ -73,5 +74,24 @@ public class ItemTableTest {
 			assertEquals("N/A", itemTable.getItemTable().get(i).getISBN());
 			assertEquals("N/A", itemTable.getItemTable().get(i).getCopynumber());
 		}
+	}
+	
+	@Test
+	public void deleteTestPass() {
+		for (int i = 2; i < itemTable.getItemTable().size(); i++) {
+			String result = itemTable.delete(itemTable.getItemTable().get(i).getISBN(), itemTable.getItemTable().get(i).getCopynumber());
+			assertEquals("success", result);
+		}
+	}
+	
+	@Test
+	public void deleteTestFail() {
+		LoanTable loanTable = LoanTable.getInstance();
+		for (int i = 0; i < loanTable.getLoanTable().size(); i++) {
+			String result = itemTable.delete(loanTable.getLoanTable().get(i).getIsbn(), loanTable.getLoanTable().get(i).getCopynumber());
+			assertEquals("Active Loan Exists", result);
+		}
+		String result = itemTable.delete("1234", "1");
+		assertEquals("The Item Does Not Exist", result);
 	}
 }
