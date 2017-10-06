@@ -60,5 +60,19 @@ public class TitleTableTest {
 			assertEquals(false, titleTable.createtitle(isbn, booktitle));
 		}
 	}
+	
+	@Test
+	public void deletePass() {
+		for (int i = 2; i < titleTable.getTitleTable().size(); i++) {
+			assertEquals("success", titleTable.delete(titleTable.getTitleTable().get(i).getISBN()));
+		}
+	}
+	
+	@Test
+	public void deleteFail() {
+		assertEquals("Active Loan Exists", titleTable.delete(titleTable.getTitleTable().get(0).getISBN()));
+		assertEquals("Active Loan Exists", titleTable.delete(titleTable.getTitleTable().get(1).getISBN()));
+		assertEquals("The Title Does Not Exist", titleTable.delete("1234"));
+	}
 
 }

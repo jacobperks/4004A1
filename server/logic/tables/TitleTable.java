@@ -60,6 +60,33 @@ public class TitleTable {
 		return result;
 	}
 	
+	public String delete(String string) {
+		String result="";
+		int index=0;
+		int flag=0;
+		for(int i=0;i<titleList.size();i++){
+			if(titleList.get(i).getISBN().equalsIgnoreCase(string)){
+				flag=flag+1;
+				index=i;
+			}else{
+				flag=flag+0;
+			}
+		}
+		if(flag!=0){
+			boolean loan=LoanTable.getInstance().checkLoan(string);
+			if(loan){
+				ItemTable.getInstance().deleteAll(string);
+				titleList.remove(index);
+				result="success";
+			}else{
+				result="Active Loan Exists";
+			}
+		}else{
+			result="The Title Does Not Exist";
+		}
+		return result;
+	}
+	
 	
 	public List<Title> getTitleTable() {
 		return titleList;
