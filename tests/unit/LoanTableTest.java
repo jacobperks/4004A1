@@ -2,11 +2,13 @@ package tests.unit;
 
 import static org.junit.Assert.*;
 
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import server.logic.tables.ItemTable;
 import server.logic.tables.LoanTable;
 import server.logic.tables.UserTable;
 import server.logic.model.Loan;
@@ -16,11 +18,13 @@ public class LoanTableTest {
 
 	LoanTable loanTable;
 	UserTable userTable;
+	ItemTable itemTable;
 	
 	@Before
 	public void setup() throws Exception {
 		loanTable = LoanTable.getInstance();
 		userTable = UserTable.getInstance();
+		itemTable = ItemTable.getInstance();
 	}
 
 	@Test
@@ -84,6 +88,27 @@ public class LoanTableTest {
 	public void checkUserTestFail() {
 		assertEquals(false, loanTable.checkUser(0));
 		assertEquals(false, loanTable.checkUser(4));
+	}
+	
+	@Test
+	public void checkLimitPass() {
+		List<Loan> loanListActual = loanTable.getLoanTable();
+		for (int i = 0; i < loanListActual.size(); i++) {
+			assertEquals(true, loanTable.checkLimit(loanListActual.get(i).getUserid()));
+		}
+	}
+	
+	@Test
+	public void checkLimitFail() {
+		List<Loan> loanListActual = loanTable.getLoanTable();
+    	Loan loan1=new Loan(0,"9781442668512","1",new Date(),"0",0);
+    	loanListActual.add(loan1);
+    	Loan loan2=new Loan(0,"9781442616236","1",new Date(),"0",1);
+    	loanListActual.add(loan2);
+    	Loan loan3=new Loan(0,"9781442616294","1",new Date(),"0",0);
+    	loanListActual.add(loan3);
+
+    	assertEquals(false, loanTable.checkLimit(0));
 	}
 
 }
