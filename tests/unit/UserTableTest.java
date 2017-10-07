@@ -43,4 +43,17 @@ public class UserTableTest {
 	public void lookupUsernameTestFail() {
 		assertEquals(-1, userTable.lookup("Jacob@carleton.ca"));
 	}
+	
+	@Test
+	public void lookupIDTestPass() {
+		String[] usernameList=new String[]{"Zhibo@carleton.ca","Yu@carleton.ca","Michelle@carleton.ca","Kevin@carleton.ca","Sun@carleton.ca"};
+		for (int i = 0; i < usernameList.length; i++) {
+			assertEquals(true, userTable.lookup(i));
+		}
+	}
+	
+	@Test
+	public void lookupIDTestFail() {
+		assertEquals(false, userTable.lookup(-1));
+	}
 }
