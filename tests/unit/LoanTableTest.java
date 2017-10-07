@@ -11,6 +11,7 @@ import org.junit.Test;
 import server.logic.tables.ItemTable;
 import server.logic.tables.LoanTable;
 import server.logic.tables.UserTable;
+import server.logic.model.Item;
 import server.logic.model.Loan;
 import server.logic.model.User;
 
@@ -148,5 +149,26 @@ public class LoanTableTest {
 		List<Loan> loanListActual = loanTable.getLoanTable();
 		loanListActual.get(1).setRenewstate("2");
 		assertEquals("Renewed Item More Than Once for the Same Loan", loanTable.renewal(4, "9781442616899", "1", new Date()));
+	}
+	
+	@Test
+	public void returnPass() {
+		List<Loan> loanListActual = loanTable.getLoanTable();
+		for (int i = 0; i < loanListActual.size(); i++) {
+			int id = loanListActual.get(i).getUserid();
+			String isbn = loanListActual.get(i).getIsbn();
+			String copynumber = loanListActual.get(i).getCopynumber();
+			assertEquals("success", loanTable.returnItem(id, isbn, copynumber, new Date()));
+		}
+	}
+	
+	@Test
+	public void returnFail() {
+		List<Item> itemListActual = itemTable.getItemTable();
+		for (int i = 1; i < itemListActual.size()-1; i++) {
+			String isbn = itemListActual.get(i).getISBN();
+			String copynumber = itemListActual.get(i).getCopynumber();
+			assertEquals("The Loan Does Not Exist", loanTable.returnItem(i, isbn, copynumber, new Date()));
+		}
 	}
 }

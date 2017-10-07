@@ -1,5 +1,6 @@
 package server.logic.tables;
 
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -164,6 +165,35 @@ public class LoanTable {
 		}else if(fee==false){
 			result="Outstanding Fee Exists";
 
+		}
+		return result;
+	}
+	
+
+	public Object returnItem(int j, String string, String string2, Date date) {
+		String result="";
+		int flag=0;
+		int index=0;
+		for(int i=0;i<loanList.size();i++){
+			String ISBN=(loanList.get(i)).getIsbn();
+			String copynumber=(loanList.get(i)).getCopynumber();
+			int userid=(loanList.get(i)).getUserid();
+			if((userid==j) && ISBN.equalsIgnoreCase(string) && copynumber.equalsIgnoreCase(string2)){
+				flag=flag+1;
+				index=i;
+			}else{
+				flag=flag+0;	
+			}
+		}
+		if(flag!=0){
+			long time = date.getTime()-loanList.get(index).getDate().getTime();
+			loanList.remove(index);
+			if(time>Config.OVERDUE*Config.STIMULATED_DAY){
+				FineTable.getInstance().applyFine(j,time);
+			}
+			result="success";
+		}else{
+			result="The Loan Does Not Exist";
 		}
 		return result;
 	}
