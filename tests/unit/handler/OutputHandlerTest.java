@@ -9,8 +9,10 @@ import org.junit.Test;
 
 import server.logic.handler.model.Output;
 import server.logic.handler.OutputHandler;
+import server.logic.model.Item;
 import server.logic.model.Title;
 import server.logic.model.User;
+import server.logic.tables.ItemTable;
 import server.logic.tables.TitleTable;
 import server.logic.tables.UserTable;
 
@@ -19,12 +21,14 @@ public class OutputHandlerTest {
 	OutputHandler outputHandler;
 	UserTable userTable;
 	TitleTable titleTable;
+	ItemTable itemTable;
 
 	@Before
 	public void setup() throws Exception {
 		outputHandler = new OutputHandler();
 		userTable = UserTable.getInstance();
 		titleTable = TitleTable.getInstance();
+		itemTable = ItemTable.getInstance();
 	}
 	
 	@Test
@@ -88,5 +92,24 @@ public class OutputHandlerTest {
 			assertEquals(expected.getState(), actual.getState());
 			assertEquals(expected.getOutput(), actual.getOutput());
 		}
+	}
+	
+	@Test
+	public void createItemPass() {
+		List<Item> itemList = itemTable.getItemTable();
+		Output expected = new Output("Success!",2);
+		Output actual = outputHandler.createItem("9781442668584");
+		assertEquals(expected.getState(), actual.getState());
+		assertEquals(expected.getOutput(), actual.getOutput());
+		String ISBN = itemList.get(itemList.size()-1).getISBN();
+		assertEquals("9781442668584", ISBN);
+	}
+	
+	@Test
+	public void createItemFail() {
+		Output expected = new Output("The Title Does Not Exists!",2);
+		Output actual = outputHandler.createItem("9781442668585");
+		assertEquals(expected.getState(), actual.getState());
+		assertEquals(expected.getOutput(), actual.getOutput());
 	}
 }
