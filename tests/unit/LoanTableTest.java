@@ -8,15 +8,19 @@ import org.junit.Before;
 import org.junit.Test;
 
 import server.logic.tables.LoanTable;
+import server.logic.tables.UserTable;
 import server.logic.model.Loan;
+import server.logic.model.User;
 
 public class LoanTableTest {
 
 	LoanTable loanTable;
+	UserTable userTable;
 	
 	@Before
 	public void setup() throws Exception {
 		loanTable = LoanTable.getInstance();
+		userTable = UserTable.getInstance();
 	}
 
 	@Test
@@ -63,6 +67,23 @@ public class LoanTableTest {
 	@Test
 	public void checkLoanOneParamTestPass() {
 		assertEquals(true, loanTable.checkLoan("9781442616898"));
+	}
+	
+	@Test
+	public void checkUserTestPass() {
+		List<User> userListActual = userTable.getUserTable();
+		for (int i = 0; i < userListActual.size(); i++){
+			if (i != 0 && i != 4) {
+				assertEquals(true, loanTable.checkUser(i));
+			}
+		}
+		assertEquals(true, loanTable.checkUser(10));
+	}
+	
+	@Test
+	public void checkUserTestFail() {
+		assertEquals(false, loanTable.checkUser(0));
+		assertEquals(false, loanTable.checkUser(4));
 	}
 
 }

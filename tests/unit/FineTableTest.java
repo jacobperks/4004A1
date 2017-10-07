@@ -33,7 +33,7 @@ public class FineTableTest {
 	}
 	
 	@Test
-	public void lookupTestFail() {
+	public void lookupTestPass() {
 		List<User> userListActual = userTable.getUserTable();
 		for (int i = 1; i < userListActual.size(); i++){
 			assertEquals(true, fineTable.lookup(i));
@@ -42,7 +42,7 @@ public class FineTableTest {
 	}
 	
 	@Test
-	public void lookupTestPass() {
+	public void lookupTestFail() {
 		assertEquals(false, fineTable.lookup(0));
 	}
 }
