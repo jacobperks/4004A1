@@ -23,6 +23,43 @@ public class FineTable {
         return FineListHolder.INSTANCE;
     }
     
+	public boolean lookup(int j) {
+		boolean result=true;
+		int fee = 0;
+		boolean user=FineTable.getInstance().checkuser(j);
+		if(user){
+			for(int i=0;i<fineList.size();i++){
+				int userid=(fineList.get(i)).getUserid();
+				if(userid==j){
+					fee=fee+fineList.get(i).getFee();
+				}
+			}	
+		}else{
+			fee=0;
+		}
+		if(fee!=0){
+			result=false;
+		}
+		return result;
+	}
+	
+	private boolean checkuser(int j) {
+		boolean result=true;
+		int fee = 0;
+		for(int i=0;i<fineList.size();i++){
+			int userid=(fineList.get(i)).getUserid();
+			if(userid==j){
+				fee=fee+1;
+			}else{
+				fee=fee+0;
+			}
+		}	
+		if(fee==0){
+			result=false;
+		}
+		return result;
+	}
+    
 	public void applyFine(int j, long time) {
 		int flag=0;
 		int index=0;
