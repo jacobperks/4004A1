@@ -80,6 +80,9 @@ public class UserTableTest {
 		for (int i = 1; i < userTable.getUserTable().size()-1; i++) {
 			assertEquals("success", userTable.delete(i));
 		}
+		for (int i = 1; i < userTable.getUserTable().size()-1; i++) {
+			assertEquals("N/A", userTable.getUserTable().get(i).getUsername());
+		}
 	}
 	
 	@Test

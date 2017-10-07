@@ -112,4 +112,36 @@ public class OutputHandlerTest {
 		assertEquals(expected.getState(), actual.getState());
 		assertEquals(expected.getOutput(), actual.getOutput());
 	}
+	
+	@Test
+	public void deleteUserPass() {
+		Output expected = new Output("Success!",2);
+		for (int i = 1; i < userTable.getUserTable().size()-1; i++) {
+			Output actual = outputHandler.deleteUser(userTable.getUserTable().get(i).getUsername());
+			assertEquals(expected.getState(), actual.getState());
+			assertEquals(expected.getOutput(), actual.getOutput());
+		}
+		for (int i = 1; i < userTable.getUserTable().size()-1; i++) {
+			assertEquals("N/A", userTable.getUserTable().get(i).getUsername());
+		}
+	}
+	
+	@Test
+	public void deleteUserFail() {
+		Output expected = new Output("Outstanding Fee Exists!",2);
+		Output actual = outputHandler.deleteUser(userTable.getUserTable().get(0).getUsername());
+		assertEquals(expected.getState(), actual.getState());
+		assertEquals(expected.getOutput(), actual.getOutput());
+		
+		expected = new Output("Active Loan Exists!",2);
+		actual = outputHandler.deleteUser(userTable.getUserTable().get(4).getUsername());
+		assertEquals(expected.getState(), actual.getState());
+		assertEquals(expected.getOutput(), actual.getOutput());
+		
+		expected = new Output("The User Does Not Exist!",7);
+		actual = outputHandler.deleteUser("jacob@carleton.ca");
+		assertEquals(expected.getState(), actual.getState());
+		assertEquals(expected.getOutput(), actual.getOutput());
+
+	}
 }
