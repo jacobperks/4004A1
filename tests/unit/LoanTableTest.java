@@ -133,5 +133,20 @@ public class LoanTableTest {
     	loanListActual.add(loan3);
 		assertEquals("The Maximun Number of Items is Reached", loanTable.createloan(4, "9781611687910", "1", new Date()));
 	}
+	
+	@Test
+	public void renewalPass() {
+		assertEquals("success", loanTable.renewal(4, "9781442616899", "1", new Date()));
+	}
 
+	
+	@Test
+	public void renewalFail() {
+		assertEquals("Outstanding Fee Exists", loanTable.renewal(0, "9781611687910", "1", new Date()));
+		assertEquals("The loan does not exist", loanTable.renewal(2, "9781317594100", "1", new Date()));
+		
+		List<Loan> loanListActual = loanTable.getLoanTable();
+		loanListActual.get(1).setRenewstate("2");
+		assertEquals("Renewed Item More Than Once for the Same Loan", loanTable.renewal(4, "9781442616899", "1", new Date()));
+	}
 }

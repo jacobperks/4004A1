@@ -129,4 +129,43 @@ public class LoanTable {
     	return result;
 	}
 	
+	public Object renewal(int j, String string, String string2, Date date) {
+		String result="";
+		int flag=0;
+		int index=0;
+		boolean limit=LoanTable.getInstance().checkLimit(j);
+		boolean fee=FineTable.getInstance().lookup(j);
+		for(int i=0;i<loanList.size();i++){
+			String ISBN=(loanList.get(i)).getIsbn();
+			String copynumber=(loanList.get(i)).getCopynumber();
+			int userid=(loanList.get(i)).getUserid();
+			if((userid==j) && ISBN.equalsIgnoreCase(string) && copynumber.equalsIgnoreCase(string2)){
+				flag=flag+1;
+				index=i;
+			}else{
+				flag=flag+0;	
+			}
+		}
+		if(limit && fee){
+			if(flag!=0){
+				if(loanList.get(index).getRenewstate().equalsIgnoreCase("0")){
+					loanList.get(index).setUserid(j);
+					loanList.get(index).setIsbn(string);
+					loanList.get(index).setCopynumber(string2);
+					loanList.get(index).setDate(new Date());
+					loanList.get(index).setRenewstate("1");
+					result="success";
+				}else{
+					result="Renewed Item More Than Once for the Same Loan";
+					}
+			}else{
+				result="The loan does not exist";
+			}
+		}else if(fee==false){
+			result="Outstanding Fee Exists";
+
+		}
+		return result;
+	}
+	
 }
