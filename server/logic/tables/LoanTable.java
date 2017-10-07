@@ -164,12 +164,10 @@ public class LoanTable {
 			}
 		}else if(fee==false){
 			result="Outstanding Fee Exists";
-
 		}
 		return result;
 	}
 	
-
 	public Object returnItem(int j, String string, String string2, Date date) {
 		String result="";
 		int flag=0;
