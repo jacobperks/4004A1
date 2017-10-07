@@ -75,4 +75,38 @@ public class UserTable {
 		}
 		return result;
 	}
+	
+	public Object delete(int i) {
+		String result="";
+		boolean loan=LoanTable.getInstance().checkUser(i);
+		int flag=0;
+		int index=0;
+		for(int j=0;j<userList.size();j++){
+			if(userList.get(j).getUserid()==i){
+				index=j;
+				flag=flag+1;
+			}else{
+				flag=flag+0;
+			}
+		}
+		
+		if(flag==0){
+			result="The User Does Not Exist";
+		}else{
+			boolean fee=FineTable.getInstance().lookup(i);
+			if(fee && loan){
+				userList.get(index).setUserid(i);
+				userList.get(index).setPassword("N/A");
+				userList.get(index).setUsername("N/A");
+				result="success";
+			}else if(fee==false){
+				result="Outstanding Fee Exists";
+			}else if(loan==false){
+				result="Active Loan Exists";
+			}
+		}
+    
+		return result;
+
+	}
 }
