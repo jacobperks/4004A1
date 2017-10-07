@@ -28,6 +28,26 @@ public class UserTable {
 	public List<User> getUserTable() {
 		return userList;
 	}
+	
+	public Object createuser(String string, String string2) {		
+		boolean result=true;
+		int flag=0;
+		for(int i=0;i<userList.size();i++){
+			String email=(userList.get(i)).getUsername();
+			if(email.equalsIgnoreCase(string)){
+				flag=flag+1;
+			}else{
+				flag=flag+0;	
+			}
+		}
+		if(flag==0){
+			User newuser=new User(userList.size(),string,string2);
+			result=userList.add(newuser);
+		}else{
+			result=false;
+		}
+		return result;	
+	}
 
 	public int lookup(String string) {
 		int userid=-1;

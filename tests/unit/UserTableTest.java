@@ -41,7 +41,7 @@ public class UserTableTest {
 	
 	@Test
 	public void lookupUsernameTestFail() {
-		assertEquals(-1, userTable.lookup("Jacob@carleton.ca"));
+		assertEquals(-1, userTable.lookup("Zhibo1@carleton.ca"));
 	}
 	
 	@Test
@@ -55,5 +55,23 @@ public class UserTableTest {
 	@Test
 	public void lookupIDTestFail() {
 		assertEquals(false, userTable.lookup(-1));
+	}
+	
+	@Test
+	public void createUserPass() {
+		assertEquals(true, userTable.createuser("jacob@carleton.ca","password123"));
+		List<User> userListActual = userTable.getUserTable();
+		assertEquals("jacob@carleton.ca", userListActual.get(userListActual.size()-1).getUsername());
+		assertEquals("password123", userListActual.get(userListActual.size()-1).getPassword());
+	}
+	
+	@Test
+	public void createUserFail() {
+		List<User> userList = userTable.getUserTable();
+		for (int i = 0; i < userList.size(); i++){
+			String username = userList.get(i).getUsername();
+			String password = userList.get(i).getPassword();
+			assertEquals(false, userTable.createuser(username, password));
+		}
 	}
 }
