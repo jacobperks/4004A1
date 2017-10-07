@@ -97,4 +97,36 @@ public class LoanTable {
 		return result;
 	}
 	
+	public Object createloan(int i, String string, String string2, Date date) {
+		String result="";
+		boolean user=UserTable.getInstance().lookup(i);
+		boolean isbn=TitleTable.getInstance().lookup(string);
+		boolean copynumber=ItemTable.getInstance().lookup(string,string2);
+		boolean oloan=LoanTable.getInstance().checkLoan(string,string2);
+		boolean limit=LoanTable.getInstance().checkLimit(i);
+		boolean fee=FineTable.getInstance().lookup(i);
+		if(user==false){
+			result="User Invalid";
+		}else if(isbn==false){
+			result="ISBN Invalid";
+		}else if(copynumber==false){
+			result="Copynumber Invalid";
+		}else{
+			if(oloan){
+				if(limit && fee){
+				Loan loan=new Loan(i,string,string2,date,"0",LoanTable.getInstance().getLoanTable().size());
+				loanList.add(loan);
+				result="success";
+				}else if(limit==false){
+					result="The Maximun Number of Items is Reached";
+				}else if(fee==false){
+					result="Outstanding Fee Exists";
+				}
+			}else{
+				result="The Item is Not Available";
+			}
+		}
+    	return result;
+	}
+	
 }

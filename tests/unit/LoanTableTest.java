@@ -110,5 +110,28 @@ public class LoanTableTest {
 
     	assertEquals(false, loanTable.checkLimit(0));
 	}
+	
+	@Test
+	public void createLoanPass() {
+		assertEquals("success", loanTable.createloan(2, "9781611687910", "1", new Date()));
+	}
+	
+	@Test
+	public void createLoanFail() {
+		assertEquals("User Invalid", loanTable.createloan(-1, "9781611687910", "1", new Date()));
+		assertEquals("ISBN Invalid", loanTable.createloan(2, "9781317594100", "1", new Date()));
+		assertEquals("Copynumber Invalid", loanTable.createloan(2, "9781611687910", "2", new Date()));
+		assertEquals("Outstanding Fee Exists", loanTable.createloan(0, "9781611687910", "1", new Date()));
+		assertEquals("The Item is Not Available", loanTable.createloan(2, "9781442668584", "1", new Date()));
+		
+		List<Loan> loanListActual = loanTable.getLoanTable();
+    	Loan loan1=new Loan(4,"9781442668512","1",new Date(),"0",0);
+    	loanListActual.add(loan1);
+    	Loan loan2=new Loan(4,"9781442616236","1",new Date(),"0",1);
+    	loanListActual.add(loan2);
+    	Loan loan3=new Loan(4,"9781442616294","1",new Date(),"0",0);
+    	loanListActual.add(loan3);
+		assertEquals("The Maximun Number of Items is Reached", loanTable.createloan(4, "9781611687910", "1", new Date()));
+	}
 
 }
