@@ -88,4 +88,21 @@ public class UserTableTest {
 		assertEquals("Active Loan Exists", userTable.delete(4));
 		assertEquals("The User Does Not Exist", userTable.delete(10));
 	}
+	
+	@Test
+	public void checkUserPass() {
+		List<User> userList = userTable.getUserTable();
+		for (int i = 0; i < userList.size(); i++){
+			String username = userList.get(i).getUsername();
+			String password = userList.get(i).getPassword();
+			assertEquals(0, userTable.checkUser(username, password));
+		}
+	}
+	
+	@Test
+	public void checkUserFail() {
+		List<User> userList = userTable.getUserTable();
+		assertEquals(1, userTable.checkUser(userList.get(0).getUsername(), "hello"));
+		assertEquals(2,userTable.checkUser("zhibo1@carleton.ca", "hello"));
+	}
 }

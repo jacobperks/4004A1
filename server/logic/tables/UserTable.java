@@ -107,6 +107,28 @@ public class UserTable {
 		}
     
 		return result;
-
+	}
+	
+	public int checkUser(String string, String string2) {
+		int result=0;
+		int flag=0;
+		int index=0;
+		for(int i=0;i<userList.size();i++){
+			if(userList.get(i).getUsername().equalsIgnoreCase(string)){
+				flag=flag+1;
+				index=i;
+			}else{
+				flag=flag+0;
+			}
+		}
+		boolean password=userList.get(index).getPassword().equalsIgnoreCase(string2);
+		if(flag!=0 && password){
+			result=0;
+		}else if(flag==0){
+			result=2;
+		}else if(password==false){
+			result=1;
+		}
+		return result;
 	}
 }
