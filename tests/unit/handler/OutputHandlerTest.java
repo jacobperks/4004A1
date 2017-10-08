@@ -352,4 +352,36 @@ public class OutputHandlerTest {
 		assertEquals(expected.getState(), actual.getState());
 		assertEquals(expected.getOutput(), actual.getOutput());
 	}
+	
+	@Test
+	public void userLoginPass() {
+		Output expected = new Output("What can I do for you?Menu:Borrow,Renew,Return,Pay Fine.", 3);
+		List<User> userListActual = userTable.getUserTable();
+		for (int i = 0; i < userListActual.size(); i++) {
+			String username = userListActual.get(i).getUsername();
+			String password = userListActual.get(i).getPassword();
+			Output actual = outputHandler.userLogin(username+","+password);
+			assertEquals(expected.getState(), actual.getState());
+			assertEquals(expected.getOutput(), actual.getOutput());
+		}
+	}
+	
+	@Test
+	public void userLoginFail() {
+		Output expected = new Output("Wrong Password!Please Input Username and Password:'username,password'", 16);
+		List<User> userListActual = userTable.getUserTable();
+		for (int i = 0; i < userListActual.size(); i++) {
+			String username = userListActual.get(i).getUsername();
+			Output actual = outputHandler.userLogin(username+",password");
+			assertEquals(expected.getState(), actual.getState());
+			assertEquals(expected.getOutput(), actual.getOutput());
+		}
+		expected = new Output("The User Does Not Exist!Please The Username and Password:'username,password'", 16);
+		for (int i = 0; i < userListActual.size(); i++) {
+			String password = userListActual.get(i).getPassword();
+			Output actual = outputHandler.userLogin("jacob@carleton.ca,"+password);
+			assertEquals(expected.getState(), actual.getState());
+			assertEquals(expected.getOutput(), actual.getOutput());
+		}
+	}
 }
