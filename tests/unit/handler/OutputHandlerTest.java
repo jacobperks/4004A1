@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.Date;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,6 +15,7 @@ import server.logic.model.Item;
 import server.logic.model.Loan;
 import server.logic.model.Title;
 import server.logic.model.User;
+import server.logic.tables.FineTable;
 import server.logic.tables.ItemTable;
 import server.logic.tables.LoanTable;
 import server.logic.tables.TitleTable;
@@ -26,6 +28,7 @@ public class OutputHandlerTest {
 	TitleTable titleTable;
 	ItemTable itemTable;
 	LoanTable loanTable;
+	FineTable fineTable;
 
 	@Before
 	public void setup() throws Exception {
@@ -34,6 +37,80 @@ public class OutputHandlerTest {
 		titleTable = TitleTable.getInstance();
 		itemTable = ItemTable.getInstance();
 		loanTable = LoanTable.getInstance();
+		fineTable = FineTable.getInstance();
+	}
+	
+	@After
+	public void teardown() throws Exception {
+		List<User> userListActual = userTable.getUserTable();
+    	String[] passwordList=new String[]{"Zhibo","Yu","Michelle","Kevin","Sun"};
+    	String[] usernameList=new String[]{"Zhibo@carleton.ca","Yu@carleton.ca","Michelle@carleton.ca","Kevin@carleton.ca","Sun@carleton.ca"};
+    	
+    	while (userListActual.size() > 5) {
+    		userListActual.remove(userListActual.size()-1);
+    	}
+    	
+    	for(int i=0;i<usernameList.length;i++){
+			userListActual.get(i).setUsername(usernameList[i]);
+			userListActual.get(i).setPassword(passwordList[i]);
+		}
+    	
+    	fineTable.getFineTable().get(0).setFee(5);
+    	
+		String[] ISBNList=new String[]{"9781442668584","9781442616899","9781442667181","9781611687910"};
+    	String[] cnList=new String[]{"1","1","1","1"};
+    	List<Item> itemListActual = itemTable.getItemTable();
+    	while (itemListActual.size() > 4) {
+    		itemListActual.remove(itemListActual.size()-1);
+    	}
+		for (int i = 0; i < itemListActual.size(); i++) {
+			itemListActual.get(i).setCopynumber(cnList[i]);
+			itemListActual.get(i).setISBN(ISBNList[i]);
+		}
+		
+		List<Loan> loanList = loanTable.getLoanTable();
+		while (loanList.size() > 2) {
+			loanList.remove(loanList.size()-1);
+		}
+		if (loanList.size() == 2) {
+			loanList.get(0).setUserid(0);
+			loanList.get(0).setIsbn("9781442668584");
+			loanList.get(0).setCopynumber("1");
+			loanList.get(0).setRenewstate("0");
+			loanList.get(0).setLoanid(0);
+			
+			loanList.get(1).setUserid(4);
+			loanList.get(1).setIsbn("9781442616899");
+			loanList.get(1).setCopynumber("1");
+			loanList.get(1).setRenewstate("0");
+			loanList.get(1).setLoanid(1);
+		} else if (loanList.size() == 0) {
+			Loan loan=new Loan(0,"9781442668584","1",new Date(),"0",0);
+	    	loanList.add(loan);
+	    	Loan loan2=new Loan(4,"9781442616899","1",new Date(),"0",1);
+	    	loanList.add(loan2);
+		} else if (loanList.size() == 1) {
+			Loan loan=new Loan(0,"9781442668584","1",new Date(),"0",0);
+	    	loanList.add(loan);
+		}
+		
+		List<Title> titleList = titleTable.getTitleTable();
+		String[] ISBNTitleList = new String[]{"9781442668584","9781442616899","9781442667181","9781611687910","9781317594277"};
+		String[] booktitleList = new String[]{"By the grace of God","Dante's lyric poetry ","Courtesy lost","Writing for justice","The act in context"};
+		while (titleList.size() > 5) {
+			titleList.remove(titleList.size()-1);
+		}
+		if (titleList.size() == 5) {
+			for (int i = 0; i < titleList.size(); i++) {
+				titleList.get(i).setISBN(ISBNTitleList[i]);
+				titleList.get(i).setBooktitle(booktitleList[i]);
+			}
+		} else{
+			for(int i=titleList.size()-1;i<ISBNList.length;i++){
+	    		Title detitle=new Title(ISBNList[i],booktitleList[i]);
+	    		titleList.add(detitle);
+			}
+		}
 	}
 	
 	@Test
