@@ -22,6 +22,7 @@ public class OutputHandler {
     public static final int BORROW=10;
     public static final int RENEW=11;
     public static final int RETURN=12;
+    public static final int PAYFINE=13;
 
 	public static boolean isInteger(String value) {
 		char[] ch = value.toCharArray();

@@ -45,5 +45,10 @@ public class FineTableTest {
 	public void lookupTestFail() {
 		assertEquals(false, fineTable.lookup(0));
 	}
+	
+	@Test
+	public void payFineTestPass() {
+		assertEquals("success", fineTable.payfine(0));
+	}
 
 }

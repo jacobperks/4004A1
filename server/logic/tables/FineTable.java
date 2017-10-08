@@ -101,5 +101,26 @@ public class FineTable {
 		return fineList;
 	}
 	
-	
+	public Object payfine(int i) {
+		String result="";
+		boolean oloan=LoanTable.getInstance().checkLimit(i);
+		int index=0;
+		boolean user=FineTable.getInstance().checkuser(i);
+		if(user){
+			for(int m=0;m<fineList.size();m++){
+				if(fineList.get(m).getUserid()==i){
+					index=m;
+				}
+			}
+		}
+		if(oloan==false){
+			result="Borrowing Items Exist";
+		}else{
+			fineList.get(index).setUserid(i);
+			fineList.get(index).setFee(0);
+			result="success";
+		}
+		return result;
+	}
+		
 }
