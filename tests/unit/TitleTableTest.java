@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,6 +18,27 @@ public class TitleTableTest {
 	@Before
 	public void setup() throws Exception {
 		titleTable = TitleTable.getInstance();
+	}
+	
+	@After
+	public void teardown() throws Exception {
+		List<Title> titleList = titleTable.getTitleTable();
+		String[] ISBNTitleList = new String[]{"9781442668584","9781442616899","9781442667181","9781611687910","9781317594277"};
+		String[] booktitleList = new String[]{"By the grace of God","Dante's lyric poetry ","Courtesy lost","Writing for justice","The act in context"};
+		while (titleList.size() > 5) {
+			titleList.remove(titleList.size()-1);
+		}
+		if (titleList.size() == 5) {
+			for (int i = 0; i < titleList.size(); i++) {
+				titleList.get(i).setISBN(ISBNTitleList[i]);
+				titleList.get(i).setBooktitle(booktitleList[i]);
+			}
+		} else{
+			for(int i=titleList.size()-1;i<ISBNTitleList.length;i++){
+	    		Title detitle=new Title(ISBNTitleList[i],booktitleList[i]);
+	    		titleList.add(detitle);
+			}
+		}
 	}
 	
 	@Test 
