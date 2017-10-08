@@ -280,4 +280,39 @@ public class OutputHandlerTest {
 		assertEquals(expected.getState(), actual.getState());
 		assertEquals(expected.getOutput(), actual.getOutput());
 	}
+	
+	@Test
+	public void returnPass() {
+		Output expected = new Output("Success!",3);
+		List<Loan> loanListActual = loanTable.getLoanTable();
+		List<User> userListActual = userTable.getUserTable();
+		for (int i = 0; i < loanListActual.size(); i++) {
+			int id = loanListActual.get(i).getUserid();
+			String email = userListActual.get(id).getUsername();
+			String isbn = loanListActual.get(i).getIsbn();
+			String copynumber = loanListActual.get(i).getCopynumber();
+			Output actual = outputHandler.returnBook(email+","+isbn+","+copynumber);
+			assertEquals(expected.getState(), actual.getState());
+			assertEquals(expected.getOutput(), actual.getOutput());
+		}
+	}
+	
+	@Test
+	public void returnFail() {
+		Output expected = new Output("The Loan Does Not Exist!",3);
+		List<Item> itemListActual = itemTable.getItemTable();
+		List<User> userListActual = userTable.getUserTable();
+		for (int i = 1; i < itemListActual.size()-1; i++) {
+			String email = userListActual.get(i).getUsername();
+			String isbn = itemListActual.get(i).getISBN();
+			String copynumber = itemListActual.get(i).getCopynumber();
+			Output actual = outputHandler.returnBook(email+","+isbn+","+copynumber);
+			assertEquals(expected.getState(), actual.getState());
+			assertEquals(expected.getOutput(), actual.getOutput());
+		}
+		expected = new Output("The User Does Not Exist!", 12);
+		Output actual = outputHandler.returnBook("jacob@carleton.ca,9781442616899,1");
+		assertEquals(expected.getState(), actual.getState());
+		assertEquals(expected.getOutput(), actual.getOutput());
+	}
 }
