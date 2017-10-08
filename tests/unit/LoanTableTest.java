@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.Date;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,6 +27,32 @@ public class LoanTableTest {
 		loanTable = LoanTable.getInstance();
 		userTable = UserTable.getInstance();
 		itemTable = ItemTable.getInstance();
+	}
+	
+	@After
+	public void teardown() throws Exception {
+		List<Loan> loanList = loanTable.getLoanTable();
+		while (loanList.size() > 2) {
+			loanList.remove(loanList.size()-1);
+		}
+		if (loanList.size() == 2) {
+			loanList.get(0).setUserid(0);
+			loanList.get(0).setIsbn("9781442668584");
+			loanList.get(0).setCopynumber("1");
+			loanList.get(0).setRenewstate("0");
+			loanList.get(0).setLoanid(0);
+			
+			loanList.get(1).setUserid(4);
+			loanList.get(1).setIsbn("9781442616899");
+			loanList.get(1).setCopynumber("1");
+			loanList.get(1).setRenewstate("0");
+			loanList.get(1).setLoanid(1);
+		} else if (loanList.size() == 0) {
+			Loan loan=new Loan(0,"9781442668584","1",new Date(),"0",0);
+	    	loanList.add(loan);
+	    	Loan loan2=new Loan(4,"9781442616899","1",new Date(),"0",1);
+	    	loanList.add(loan2);
+		}
 	}
 
 	@Test
