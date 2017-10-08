@@ -250,4 +250,34 @@ public class OutputHandlerTest {
 		assertEquals(expected.getState(), actual.getState());
 		assertEquals(expected.getOutput(), actual.getOutput());
 	}
+	
+	@Test
+	public void renewPass() {
+		Output expected = new Output("Success!",3);
+		Output actual = outputHandler.renew("Sun@carleton.ca,9781442616899,1");
+		assertEquals(expected.getState(), actual.getState());
+		assertEquals(expected.getOutput(), actual.getOutput());
+	}
+
+	
+	@Test
+	public void renewFail() {
+		Output expected = new Output("The loan does not exist!",3);
+		Output actual = outputHandler.renew("Michelle@carleton.ca,9781317594100,1");
+		assertEquals(expected.getState(), actual.getState());
+		assertEquals(expected.getOutput(), actual.getOutput());
+		
+		expected = new Output("Outstanding Fee Exists!",3);
+		actual = outputHandler.renew("Zhibo@carleton.ca,9781611687910,1");
+		assertEquals(expected.getState(), actual.getState());
+		assertEquals(expected.getOutput(), actual.getOutput());
+		
+		List<Loan> loanListActual = loanTable.getLoanTable();
+		loanListActual.get(1).setRenewstate("2");
+		
+		expected = new Output("Renewed Item More Than Once for the Same Loan!",3);
+		actual = outputHandler.renew("Sun@carleton.ca,9781442616899,1");
+		assertEquals(expected.getState(), actual.getState());
+		assertEquals(expected.getOutput(), actual.getOutput());
+	}
 }
