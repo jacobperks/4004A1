@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,6 +18,22 @@ public class UserTableTest {
 	@Before
 	public void setup() throws Exception {
 		userTable = UserTable.getInstance();
+	}
+	
+	@After
+	public void teardown() throws Exception {
+		List<User> userListActual = userTable.getUserTable();
+    	String[] passwordList=new String[]{"Zhibo","Yu","Michelle","Kevin","Sun"};
+    	String[] usernameList=new String[]{"Zhibo@carleton.ca","Yu@carleton.ca","Michelle@carleton.ca","Kevin@carleton.ca","Sun@carleton.ca"};
+    	
+    	while (userListActual.size() > 5) {
+    		userListActual.remove(userListActual.size()-1);
+    	}
+    	
+    	for(int i=0;i<usernameList.length;i++){
+			userListActual.get(i).setUsername(usernameList[i]);
+			userListActual.get(i).setPassword(passwordList[i]);
+		}
 	}
 	
 	@Test 
