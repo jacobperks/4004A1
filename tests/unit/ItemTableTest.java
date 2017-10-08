@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,6 +20,20 @@ public class ItemTableTest {
 	@Before
 	public void setup() throws Exception {
 		itemTable = ItemTable.getInstance();
+	}
+	
+	@After
+	public void teardown() throws Exception {
+		String[] ISBNList=new String[]{"9781442668584","9781442616899","9781442667181","9781611687910"};
+    	String[] cnList=new String[]{"1","1","1","1"};
+    	List<Item> itemListActual = itemTable.getItemTable();
+    	while (itemListActual.size() > 4) {
+    		itemListActual.remove(itemListActual.size()-1);
+    	}
+		for (int i = 0; i < itemListActual.size(); i++) {
+			itemListActual.get(i).setCopynumber(cnList[i]);
+			itemListActual.get(i).setISBN(ISBNList[i]);
+		}
 	}
 	
 	@Test 
@@ -53,9 +68,6 @@ public class ItemTableTest {
 		assertEquals(true, itemTable.createitem("9781442668584"));
 		String ISBN = itemList.get(itemList.size()-1).getISBN();
 		assertEquals("9781442668584", ISBN);
-		assertEquals(true, itemTable.createitem("9781317594277"));
-		ISBN = itemList.get(itemList.size()-1).getISBN();
-		assertEquals("9781317594277", ISBN);
 	}
 	
 	@Test
