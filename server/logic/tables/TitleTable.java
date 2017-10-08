@@ -91,5 +91,18 @@ public class TitleTable {
 	public List<Title> getTitleTable() {
 		return titleList;
 	}
+	
+	public String toString() {
+		String titles = "[";
+		for (int i = 0; i < titleList.size(); i++) {
+			if (i != titleList.size()-1) {
+				titles += titleList.get(i).getBooktitle() + ",";
+			} else {
+				titles += titleList.get(i).getBooktitle();
+			}
+		}
+		titles += "]";
+		return titles;
+	}
 
 }

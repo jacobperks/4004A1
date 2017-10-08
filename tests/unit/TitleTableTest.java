@@ -74,5 +74,12 @@ public class TitleTableTest {
 		assertEquals("Active Loan Exists", titleTable.delete(titleTable.getTitleTable().get(1).getISBN()));
 		assertEquals("The Title Does Not Exist", titleTable.delete("1234"));
 	}
+	
+	@Test
+	public void toStringTest() {
+		String titles = titleTable.toString();
+		assertEquals("[By the grace of God,Dante's lyric poetry ,Courtesy lost,Writing for justice,The act in context]", titles);
+		
+	}
 
 }
