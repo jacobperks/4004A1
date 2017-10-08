@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,6 +22,11 @@ public class FineTableTest {
 	public void setup() throws Exception {
 		fineTable = FineTable.getInstance();
 		userTable = UserTable.getInstance();
+	}
+	
+	@After
+	public void teardown() throws Exception {
+		fineTable.getFineTable().get(0).setFee(5);
 	}
 	
 	@Test 
