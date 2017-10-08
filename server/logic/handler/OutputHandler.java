@@ -15,6 +15,7 @@ public class OutputHandler {
     public static final int CREATEITEM=6;
     public static final int DELETEUSER=7;
     public static final int DELETETITLE=8;
+    public static final int DELETEITEM=9;
 
 	public static boolean isInteger(String value) {
 		char[] ch = value.toCharArray();
@@ -147,6 +148,33 @@ public class OutputHandler {
         		output.setOutput(result+"!");
         	}
         	output.setState(CLERK);
+        }
+		return output;
+	}
+	
+	public Output deleteItem(String input) {
+		Output output=new Output("",0);
+		String[] strArray = null;   
+        strArray = input.split(",");
+        boolean number=isInteger(strArray[0]);
+        Object result="";
+        if(strArray.length!=2 || number!=true){
+        	output.setOutput("Your input should in this format:'ISBN,copynumber',ISBN should be a 13-digit number");
+        	output.setState(DELETEITEM);
+        }else{
+        	boolean copynumber=isNumber(strArray[1]);
+        	if(copynumber!=true){
+        		output.setOutput("Your input should in this format:'ISBN,copynumber',ISBN should be a 13-digit number");
+            	output.setState(DELETEITEM);
+        	}else{
+        		result=ItemTable.getInstance().delete(strArray[0], strArray[1]);
+            	if(result.equals("success")){
+            		output.setOutput("Success!");
+            	}else{
+            		output.setOutput(result+"!");
+            	}
+            	output.setState(CLERK);
+        	}
         }
 		return output;
 	}

@@ -13,6 +13,7 @@ import server.logic.model.Item;
 import server.logic.model.Title;
 import server.logic.model.User;
 import server.logic.tables.ItemTable;
+import server.logic.tables.LoanTable;
 import server.logic.tables.TitleTable;
 import server.logic.tables.UserTable;
 
@@ -168,6 +169,31 @@ public class OutputHandlerTest {
 		
 		expected = new Output("The Title Does Not Exist!",2);
 		actual = outputHandler.deleteTitle("1234567891011");
+		assertEquals(expected.getState(), actual.getState());
+		assertEquals(expected.getOutput(), actual.getOutput());
+	}
+	
+	@Test
+	public void deleteItemPass() {
+		Output expected = new Output("Success!",2);
+		for (int i = 2; i < itemTable.getItemTable().size(); i++) {
+			Output actual = outputHandler.deleteItem(itemTable.getItemTable().get(i).getISBN()+","+itemTable.getItemTable().get(i).getCopynumber());
+			assertEquals(expected.getState(), actual.getState());
+			assertEquals(expected.getOutput(), actual.getOutput());
+		}
+	}
+	
+	@Test
+	public void deleteItemFail() {
+		LoanTable loanTable = LoanTable.getInstance();
+		Output expected = new Output("Active Loan Exists!",2);
+		for (int i = 0; i < loanTable.getLoanTable().size(); i++) {
+			Output actual = outputHandler.deleteItem(itemTable.getItemTable().get(i).getISBN()+","+itemTable.getItemTable().get(i).getCopynumber());
+			assertEquals(expected.getState(), actual.getState());
+			assertEquals(expected.getOutput(), actual.getOutput());
+		}
+		expected = new Output("The Item Does Not Exist!",2);
+		Output actual = outputHandler.deleteItem("1111111111111,1");
 		assertEquals(expected.getState(), actual.getState());
 		assertEquals(expected.getOutput(), actual.getOutput());
 	}
