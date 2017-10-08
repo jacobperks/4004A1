@@ -315,4 +315,20 @@ public class OutputHandlerTest {
 		assertEquals(expected.getState(), actual.getState());
 		assertEquals(expected.getOutput(), actual.getOutput());
 	}
+	
+	@Test
+	public void payFinePass() {
+		Output expected = new Output("Success!", 3);
+		Output actual = outputHandler.payFine("Zhibo@carleton.ca");
+		assertEquals(expected.getState(), actual.getState());
+		assertEquals(expected.getOutput(), actual.getOutput());
+	}
+	
+	@Test
+	public void payFineFail() {
+		Output expected = new Output("The User Does Not Exist!", 13);
+		Output actual = outputHandler.payFine("Jacob@carleton.ca");
+		assertEquals(expected.getState(), actual.getState());
+		assertEquals(expected.getOutput(), actual.getOutput());
+	}
 }
