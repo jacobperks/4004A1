@@ -331,4 +331,12 @@ public class OutputHandlerTest {
 		assertEquals(expected.getState(), actual.getState());
 		assertEquals(expected.getOutput(), actual.getOutput());
 	}
+	
+	@Test
+	public void monitorTest() {
+		Output expected = new Output("[Zhibo@carleton.ca,Yu@carleton.ca,Michelle@carleton.ca,Kevin@carleton.ca,Sun@carleton.ca]\n[By the grace of God,Dante's lyric poetry ,Courtesy lost,Writing for justice,The act in context]", 2);
+		Output actual = outputHandler.monitor();
+		assertEquals(expected.getState(), actual.getState());
+		assertEquals(expected.getOutput(), actual.getOutput());
+	}
 }

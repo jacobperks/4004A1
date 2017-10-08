@@ -24,6 +24,7 @@ public class OutputHandler {
     public static final int RENEW=11;
     public static final int RETURN=12;
     public static final int PAYFINE=13;
+    public static final int MONITOR=14;
 
 	public static boolean isInteger(String value) {
 		char[] ch = value.toCharArray();
@@ -307,6 +308,15 @@ public class OutputHandler {
         		output.setState(USER);
         	}
         	
+		return output;
+	}
+	
+	public Output monitor() {
+		Output output = new Output("",0);
+		String users = UserTable.getInstance().toString();
+		String titles = TitleTable.getInstance().toString();
+		output.setOutput(users+"\n"+titles);
+		output.setState(CLERK);
 		return output;
 	}
 }
