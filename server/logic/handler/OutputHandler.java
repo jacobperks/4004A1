@@ -1,7 +1,10 @@
 package server.logic.handler;
 
+import java.util.Date;
+
 import server.logic.handler.model.Output;
 import server.logic.tables.ItemTable;
+import server.logic.tables.LoanTable;
 import server.logic.tables.TitleTable;
 import server.logic.tables.UserTable;
 
@@ -16,6 +19,7 @@ public class OutputHandler {
     public static final int DELETEUSER=7;
     public static final int DELETETITLE=8;
     public static final int DELETEITEM=9;
+    public static final int BORROW=10;
 
 	public static boolean isInteger(String value) {
 		char[] ch = value.toCharArray();
@@ -175,6 +179,38 @@ public class OutputHandler {
             	}
             	output.setState(CLERK);
         	}
+        }
+		return output;
+	}
+	
+	public Output borrow(String input) {
+		Output output=new Output("",0);
+		String[] strArray = null;   
+        strArray = input.split(",");
+        boolean email=strArray[0].contains("@");
+        int userid=UserTable.getInstance().lookup(strArray[0]);
+        Object result="";
+        if(strArray.length!=3 || email!=true){
+        	output.setOutput("Your input should in this format:'useremail,ISBN,copynumber'");
+        	output.setState(BORROW);
+        }else if(userid==-1){
+        	output.setOutput("The User Does Not Exist!");
+        	output.setState(BORROW);
+        }else{
+        	boolean ISBN=isInteger(strArray[1]);
+        	boolean copynumber=isNumber(strArray[2]);
+        	if(ISBN!=true || copynumber!=true){
+        		output.setOutput("Your input should in this format:'useremail,ISBN,copynumber'");
+            	output.setState(BORROW);
+        	}else{
+        		result=LoanTable.getInstance().createloan(userid, strArray[1], strArray[2], new Date());
+        		if(result.equals("success")){
+            		output.setOutput("Success!");
+            	}else{
+            		output.setOutput(result+"!");
+            	}
+        	}
+        	output.setState(USER);
         }
 		return output;
 	}

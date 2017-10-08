@@ -2,6 +2,7 @@ package tests.unit.handler;
 
 import static org.junit.Assert.*;
 
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Before;
@@ -10,6 +11,7 @@ import org.junit.Test;
 import server.logic.handler.model.Output;
 import server.logic.handler.OutputHandler;
 import server.logic.model.Item;
+import server.logic.model.Loan;
 import server.logic.model.Title;
 import server.logic.model.User;
 import server.logic.tables.ItemTable;
@@ -23,6 +25,7 @@ public class OutputHandlerTest {
 	UserTable userTable;
 	TitleTable titleTable;
 	ItemTable itemTable;
+	LoanTable loanTable;
 
 	@Before
 	public void setup() throws Exception {
@@ -30,6 +33,7 @@ public class OutputHandlerTest {
 		userTable = UserTable.getInstance();
 		titleTable = TitleTable.getInstance();
 		itemTable = ItemTable.getInstance();
+		loanTable = LoanTable.getInstance();
 	}
 	
 	@Test
@@ -194,6 +198,55 @@ public class OutputHandlerTest {
 		}
 		expected = new Output("The Item Does Not Exist!",2);
 		Output actual = outputHandler.deleteItem("1111111111111,1");
+		assertEquals(expected.getState(), actual.getState());
+		assertEquals(expected.getOutput(), actual.getOutput());
+	}
+	
+	@Test
+	public void borrowPass() {
+		Output expected = new Output("Success!",3);
+		Output actual = outputHandler.borrow("Michelle@carleton.ca,9781611687910,1");
+		assertEquals(expected.getState(), actual.getState());
+		assertEquals(expected.getOutput(), actual.getOutput());
+	}
+	
+	@Test
+	public void borrowFail() {
+		Output expected = new Output("The User Does Not Exist!",10);
+		Output actual = outputHandler.borrow("jacob@gmail.com,9781611687910,1");
+		assertEquals(expected.getState(), actual.getState());
+		assertEquals(expected.getOutput(), actual.getOutput());
+		
+		expected = new Output("ISBN Invalid!",3);
+		actual = outputHandler.borrow("Michelle@carleton.ca,9781317594100,1");
+		assertEquals(expected.getState(), actual.getState());
+		assertEquals(expected.getOutput(), actual.getOutput());
+			
+		expected = new Output("Copynumber Invalid!",3);
+		actual = outputHandler.borrow("Michelle@carleton.ca,9781611687910,2");
+		assertEquals(expected.getState(), actual.getState());
+		assertEquals(expected.getOutput(), actual.getOutput());
+		
+		expected = new Output("Outstanding Fee Exists!",3);
+		actual = outputHandler.borrow("Zhibo@carleton.ca,9781611687910,1");
+		assertEquals(expected.getState(), actual.getState());
+		assertEquals(expected.getOutput(), actual.getOutput());
+	
+		expected = new Output("The Item is Not Available!",3);
+		actual = outputHandler.borrow("Michelle@carleton.ca,9781442668584,1");
+		assertEquals(expected.getState(), actual.getState());
+		assertEquals(expected.getOutput(), actual.getOutput());
+
+		List<Loan> loanListActual = loanTable.getLoanTable();
+    	Loan loan1=new Loan(4,"9781442668512","1",new Date(),"0",0);
+    	loanListActual.add(loan1);
+    	Loan loan2=new Loan(4,"9781442616236","1",new Date(),"0",1);
+    	loanListActual.add(loan2);
+    	Loan loan3=new Loan(4,"9781442616294","1",new Date(),"0",0);
+    	loanListActual.add(loan3);
+    	
+    	expected = new Output("The Maximun Number of Items is Reached!",3);
+		actual = outputHandler.borrow("Sun@carleton.ca,9781611687910,1");
 		assertEquals(expected.getState(), actual.getState());
 		assertEquals(expected.getOutput(), actual.getOutput());
 	}
