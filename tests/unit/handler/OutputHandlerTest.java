@@ -144,4 +144,31 @@ public class OutputHandlerTest {
 		assertEquals(expected.getOutput(), actual.getOutput());
 
 	}
+	
+	@Test
+	public void deleteTitlePass() {
+		Output expected = new Output("Success!",2);
+		for (int i = 2; i < titleTable.getTitleTable().size(); i++) {
+			Output actual = outputHandler.deleteTitle(titleTable.getTitleTable().get(i).getISBN());
+			assertEquals(expected.getState(), actual.getState());
+			assertEquals(expected.getOutput(), actual.getOutput());
+		}
+	}
+	
+	@Test
+	public void deleteTitleFail() {
+		Output expected = new Output("Active Loan Exists!",2);
+		Output actual = outputHandler.deleteTitle(titleTable.getTitleTable().get(0).getISBN());
+		assertEquals(expected.getState(), actual.getState());
+		assertEquals(expected.getOutput(), actual.getOutput());
+		
+		actual = outputHandler.deleteTitle(titleTable.getTitleTable().get(1).getISBN());
+		assertEquals(expected.getState(), actual.getState());
+		assertEquals(expected.getOutput(), actual.getOutput());
+		
+		expected = new Output("The Title Does Not Exist!",2);
+		actual = outputHandler.deleteTitle("1234567891011");
+		assertEquals(expected.getState(), actual.getState());
+		assertEquals(expected.getOutput(), actual.getOutput());
+	}
 }
