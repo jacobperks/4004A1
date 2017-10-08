@@ -108,4 +108,11 @@ public class UserTableTest {
 		assertEquals(1, userTable.checkUser(userList.get(0).getUsername(), "hello"));
 		assertEquals(2,userTable.checkUser("zhibo1@carleton.ca", "hello"));
 	}
+	
+	@Test
+	public void toStringTest() {
+		String users = userTable.toString();
+		assertEquals("[Zhibo@carleton.ca,Yu@carleton.ca,Michelle@carleton.ca,Kevin@carleton.ca,Sun@carleton.ca]", users);
+		
+	}
 }

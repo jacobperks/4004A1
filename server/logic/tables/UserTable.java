@@ -131,4 +131,17 @@ public class UserTable {
 		}
 		return result;
 	}
+	
+	public String toString() {
+		String users = "[";
+		for (int i = 0; i < userList.size(); i++) {
+			if (i != userList.size()-1) {
+				users += userList.get(i).getUsername() + ",";
+			} else {
+				users += userList.get(i).getUsername();
+			}
+		}
+		users += "]";
+		return users;
+	}
 }
