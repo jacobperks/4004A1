@@ -339,4 +339,17 @@ public class OutputHandlerTest {
 		assertEquals(expected.getState(), actual.getState());
 		assertEquals(expected.getOutput(), actual.getOutput());
 	}
+	
+	@Test
+	public void clerkLoginTests() {
+		Output expected = new Output("What can I do for you?Menu:Create User/Title/Item,Delete User/Title/Item.", 2);
+		Output actual = outputHandler.clerkLogin("admin");
+		assertEquals(expected.getState(), actual.getState());
+		assertEquals(expected.getOutput(), actual.getOutput());
+		
+		expected = new Output("Wrong Password!Please Input The Password:", 15);
+		actual = outputHandler.clerkLogin("password");
+		assertEquals(expected.getState(), actual.getState());
+		assertEquals(expected.getOutput(), actual.getOutput());
+	}
 }
