@@ -2,11 +2,13 @@ package server.logic.tables;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import utilities.Trace;
+import org.apache.log4j.Logger;
 
 import server.logic.model.User;
 
 public class UserTable {
+	private Logger logger = Trace.getInstance().getLogger("opreation_file");
 	List<User> userList=new ArrayList<User>();
     private static class UserListHolder {
         private static final UserTable INSTANCE = new UserTable();
@@ -19,6 +21,7 @@ public class UserTable {
 			User deuser=new User(i,usernameList[i],passwordList[i]);
 			userList.add(deuser);
 		}
+    	logger.info(String.format("Operation:Initialize UserTable;UserTable: %s", userList));
     };
     public static final UserTable getInstance() {
         return UserListHolder.INSTANCE;
@@ -43,8 +46,10 @@ public class UserTable {
 		if(flag==0){
 			User newuser=new User(userList.size(),string,string2);
 			result=userList.add(newuser);
+			logger.info(String.format("Operation:Create New User;User Info:[%s,%s];State:Success", string,string2));
 		}else{
 			result=false;
+			logger.info(String.format("Operation:Create New User;User Info:[%s,%s];State:Fail;Reason:The User already existed.", string,string2));
 		}
 		return result;	
 	}
@@ -89,20 +94,25 @@ public class UserTable {
 				flag=flag+0;
 			}
 		}
-		
 		if(flag==0){
 			result="The User Does Not Exist";
+			logger.info(String.format("Operation:Delete User;User Info:[%s,%s];State:Fail;Reason:The User Does Not Exist.", "N/A","N/A"));
 		}else{
 			boolean fee=FineTable.getInstance().lookup(i);
+			String string=userList.get(index).getUsername();
+			String string2=userList.get(index).getPassword();
 			if(fee && loan){
 				userList.get(index).setUserid(i);
 				userList.get(index).setPassword("N/A");
 				userList.get(index).setUsername("N/A");
 				result="success";
+				logger.info(String.format("Operation:Delete User;User Info:[%s,%s];State:Success", string,string2));
 			}else if(fee==false){
 				result="Outstanding Fee Exists";
+				logger.info(String.format("Operation:Delete User;User Info:[%s,%s];State:Fail;Reason:Outstanding Fee Exists.", string,string2));
 			}else if(loan==false){
 				result="Active Loan Exists";
+				logger.info(String.format("Operation:Delete User;User Info:[%s,%s];State:Fail;Reason:Active Loan Exists.", string,string2));
 			}
 		}
     

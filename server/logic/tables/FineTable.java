@@ -7,8 +7,11 @@ import java.util.List;
 import server.logic.model.Fine;
 import server.logic.model.Loan;
 import utilities.Config;
+import org.apache.log4j.Logger;
+import utilities.Trace;
 
 public class FineTable {
+	private Logger logger = Trace.getInstance().getLogger("opreation_file");
 	List<Fine> fineList=new ArrayList<Fine>();
     private static class FineListHolder {
         private static final FineTable INSTANCE = new FineTable();
@@ -75,17 +78,21 @@ public class FineTable {
 			if(a>=0){
 				fineList.get(index).setFee(a+fineList.get(index).getFee());
 				fineList.get(index).setUserid(j);
+				logger.info(String.format("Operation:Apply OutStanding Fee;Fee Info:[%d,%d];State:Success", j,a+fineList.get(index).getFee()));
 			}else{
 				fineList.get(index).setFee(fineList.get(index).getFee());
 				fineList.get(index).setUserid(j);
+				logger.info(String.format("Operation:Apply OutStanding Fee;Fee Info:[%d,%d];State:Success", j,a+fineList.get(index).getFee()));
 			}
 		}else{
 			if(a>=0){
 				Fine Fine=new Fine(j,a);
 				fineList.add(Fine);
+				logger.info(String.format("Operation:Apply OutStanding Fee;Fee Info:[%d,%d];State:Success", j,a));
 			}else{
 				Fine Fine=new Fine(j,0);
 				fineList.add(Fine);
+				logger.info(String.format("Operation:Apply OutStanding Fee;Fee Info:[%d,%d];State:Success", j,0));
 			}
 		}
 	}
@@ -95,6 +102,7 @@ public class FineTable {
     	for(int i=0;i<loanList.size();i++){
     		applyFine(loanList.get(i).getUserid(), new Date().getTime()-loanList.get(i).getDate().getTime());
     	}
+    	logger.info(String.format("Operation:Initialize FeeTable;FeeTable: %s", fineList));
 	}
 
 	public List<Fine> getFineTable() {
@@ -105,20 +113,28 @@ public class FineTable {
 		String result="";
 		boolean oloan=LoanTable.getInstance().checkLimit(i);
 		int index=0;
+		int fee=0;
 		boolean user=FineTable.getInstance().checkuser(i);
 		if(user){
 			for(int m=0;m<fineList.size();m++){
 				if(fineList.get(m).getUserid()==i){
+					fee=fineList.get(m).getFee();
 					index=m;
+				} else {
+					fee = 0;
 				}
 			}
+		} else {
+			fee=0;
 		}
 		if(oloan==false){
 			result="Borrowing Items Exist";
+			logger.info(String.format("Operation:Pay Fine;Fee Info:[%d,%d];State:Fail;Reason:Borrowing Items Exist.", i,fee));
 		}else{
 			fineList.get(index).setUserid(i);
 			fineList.get(index).setFee(0);
 			result="success";
+			logger.info(String.format("Operation:Pay Fine;Fee Info:[%d,%d];State:Success", i,fee));
 		}
 		return result;
 	}

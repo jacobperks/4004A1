@@ -1,15 +1,21 @@
 package server.logic.tables;
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import utilities.Config;
+import org.apache.log4j.Logger;
+
+import utilities.Trace;
 
 
 import server.logic.model.Loan;
 
 public class LoanTable {
+	private Logger logger = Trace.getInstance().getLogger("opreation_file");
 	List<Loan> loanList=new ArrayList<Loan>();
     private static class LoanListHolder {
         private static final LoanTable INSTANCE = new LoanTable();
@@ -20,6 +26,7 @@ public class LoanTable {
     	loanList.add(loan);
     	Loan loan2=new Loan(4,"9781442616899","1",new Date(),"0",1);
     	loanList.add(loan2);
+    	logger.info(String.format("Operation:Initialize LoanTable;LoanTable: %s", loanList));
     };
     public static final LoanTable getInstance() {
         return LoanListHolder.INSTANCE;
@@ -98,6 +105,12 @@ public class LoanTable {
 		return result;
 	}
 	
+	private String dateformat(Date date){
+		DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		String datestr=format1.format(date);
+		return datestr;
+	}
+	
 	public Object createloan(int i, String string, String string2, Date date) {
 		String result="";
 		boolean user=UserTable.getInstance().lookup(i);
@@ -108,23 +121,30 @@ public class LoanTable {
 		boolean fee=FineTable.getInstance().lookup(i);
 		if(user==false){
 			result="User Invalid";
+			logger.info(String.format("Operation:Borrow Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:Invalid User.", i,string,string2,dateformat(date)));
 		}else if(isbn==false){
 			result="ISBN Invalid";
+			logger.info(String.format("Operation:Borrow Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:Invalid ISBN.", i,string,string2,dateformat(date)));
 		}else if(copynumber==false){
 			result="Copynumber Invalid";
+			logger.info(String.format("Operation:Borrow Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:Invalid Copynumber.", i,string,string2,dateformat(date)));
 		}else{
 			if(oloan){
 				if(limit && fee){
 				Loan loan=new Loan(i,string,string2,date,"0",LoanTable.getInstance().getLoanTable().size());
 				loanList.add(loan);
 				result="success";
+				logger.info(String.format("Operation:Borrow Item;Loan Info:[%d,%s,%s,%s];State:Success", i,string,string2,dateformat(date)));
 				}else if(limit==false){
 					result="The Maximun Number of Items is Reached";
+					logger.info(String.format("Operation:Borrow Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:The Maximun Number of Items is Reached.", i,string,string2,dateformat(date)));
 				}else if(fee==false){
 					result="Outstanding Fee Exists";
+					logger.info(String.format("Operation:Borrow Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:Outstanding Fee Exists.", i,string,string2,dateformat(date)));
 				}
 			}else{
 				result="The Item is Not Available";
+				logger.info(String.format("Operation:Borrow Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:The Item is Not Available.", i,string,string2,dateformat(date)));
 			}
 		}
     	return result;
@@ -156,14 +176,18 @@ public class LoanTable {
 					loanList.get(index).setDate(new Date());
 					loanList.get(index).setRenewstate("1");
 					result="success";
+					logger.info(String.format("Operation:Renew Item;Loan Info:[%d,%s,%s,%s];State:Success", j,string,string2,dateformat(date)));
 				}else{
 					result="Renewed Item More Than Once for the Same Loan";
+					logger.info(String.format("Operation:Renew Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:Renewed Item More Than Once for the Same Loan.", j,string,string2,dateformat(date)));
 					}
 			}else{
 				result="The loan does not exist";
+				logger.info(String.format("Operation:Renew Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:The loan does not exist.", j,string,string2,dateformat(date)));
 			}
 		}else if(fee==false){
 			result="Outstanding Fee Exists";
+			logger.info(String.format("Operation:Renew Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:Outstanding Fee Exists.", j,string,string2,dateformat(date)));
 		}
 		return result;
 	}
@@ -190,8 +214,10 @@ public class LoanTable {
 				FineTable.getInstance().applyFine(j,time);
 			}
 			result="success";
+			logger.info(String.format("Operation:Return Item;Loan Info:[%d,%s,%s,%s];State:Success", j,string,string2,dateformat(date)));
 		}else{
 			result="The Loan Does Not Exist";
+			logger.info(String.format("Operation:Return Item;Loan Info:[%d,%s,%s,%s];State:Fail;Reason:The Loan Does Not Exist.", j,string,string2,dateformat(date)));
 		}
 		return result;
 	}

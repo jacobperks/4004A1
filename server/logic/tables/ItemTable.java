@@ -2,10 +2,12 @@ package server.logic.tables;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import org.apache.log4j.Logger;
 import server.logic.model.Item;
+import utilities.Trace;
 
 public class ItemTable {
+	private Logger logger = Trace.getInstance().getLogger("opreation_file");
 	List<Item> itemList=new ArrayList<Item>();
     private static class ItemListHolder {
         private static final ItemTable INSTANCE = new ItemTable();
@@ -18,6 +20,7 @@ public class ItemTable {
 			Item deitem=new Item(i,ISBNList[i],cnList[i]);
 			itemList.add(deitem);
 		}
+    	logger.info(String.format("Operation:Initialize ItemTable;ItemTable: %s", itemList));
     };
     
     public static final ItemTable getInstance() {
@@ -39,8 +42,10 @@ public class ItemTable {
 		}
 		Item newitem=new Item(itemList.size(),string,String.valueOf(flag+1));
 		itemList.add(newitem);
+		logger.info(String.format("Operation:Create New Item;Item Info:[%s,%s];State:Success", string,String.valueOf(flag+1)));
 		}else{
 			result=false;
+			logger.info(String.format("Operation:Create New Item;Item Info:[%s,%s];State:Fail;Reason:No such ISBN existed.", string,"N/A"));
 		}
 		return result;
 	}
@@ -68,6 +73,7 @@ public class ItemTable {
 			if(string.equalsIgnoreCase(itemList.get(i).getISBN())){
 				itemList.get(i).setISBN("N/A");
 				itemList.get(i).setCopynumber("N/A");
+				logger.info(String.format("Operation:Delete Item Due to Title Deletion;ISBN Info:[%s];State:Success", string));
 			}
 		}
 	}
@@ -91,11 +97,14 @@ public class ItemTable {
 			if(loan){
 			itemList.get(index).setCopynumber("N/A");
 			result="success";
+			logger.info(String.format("Operation:Delete Item;Item Info:[%s,%s];State:Success", string,"N/A"));
 			}else{
 				result="Active Loan Exists";
+				logger.info(String.format("Operation:Delete Item;Item Info:[%s,%s];State:Fail;Reason:The item is currently on loan.", string,string2));
 			}
 		}else{
 			result="The Item Does Not Exist";
+			logger.info(String.format("Operation:Delete Item;Item Info:[%s,%s];State:Fail;Reason:The Item Does Not Exist.", string,string2));
 		}
 		return result;
 	}
