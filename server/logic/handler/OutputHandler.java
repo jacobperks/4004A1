@@ -326,7 +326,7 @@ public class OutputHandler {
 	public Output clerkLogin(String input) {
 		Output output=new Output("",0);
 		if(input.equalsIgnoreCase(Config.CLERK_PASSWORD)){
-			output.setOutput("What can I do for you?Menu:Create User/Title/Item,Delete User/Title/Item.");
+			output.setOutput("What can I do for you?Menu:Create User/Title/Item,Delete User/Title/Item,Monitor.");
         	output.setState(CLERK);
 		}else{
 			output.setOutput("Wrong Password!Please Input The Password:");
