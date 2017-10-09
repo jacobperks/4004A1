@@ -189,7 +189,7 @@ public class OutputHandlerTest {
 	
 	@Test
 	public void createItemFail() {
-		Output expected = new Output("The Title Does Not Exists!",2);
+		Output expected = new Output("The Title Does Not Exist! Create a title first:",5);
 		Output actual = outputHandler.createItem("9781442668585");
 		assertEquals(expected.getState(), actual.getState());
 		assertEquals(expected.getOutput(), actual.getOutput());
@@ -220,7 +220,7 @@ public class OutputHandlerTest {
 		assertEquals(expected.getState(), actual.getState());
 		assertEquals(expected.getOutput(), actual.getOutput());
 		
-		expected = new Output("The User Does Not Exist!",7);
+		expected = new Output("The User Does Not Exist!",2);
 		actual = outputHandler.deleteUser("jacob@carleton.ca");
 		assertEquals(expected.getState(), actual.getState());
 		assertEquals(expected.getOutput(), actual.getOutput());
@@ -304,7 +304,7 @@ public class OutputHandlerTest {
 		assertEquals(expected.getState(), actual.getState());
 		assertEquals(expected.getOutput(), actual.getOutput());
 		
-		expected = new Output("Outstanding Fee Exists!",3);
+		expected = new Output("Outstanding Fee Exists. Pay fine first: ",13);
 		actual = outputHandler.borrow("Zhibo@carleton.ca,9781611687910,1");
 		assertEquals(expected.getState(), actual.getState());
 		assertEquals(expected.getOutput(), actual.getOutput());
@@ -344,7 +344,7 @@ public class OutputHandlerTest {
 		assertEquals(expected.getState(), actual.getState());
 		assertEquals(expected.getOutput(), actual.getOutput());
 		
-		expected = new Output("Outstanding Fee Exists!",3);
+		expected = new Output("Outstanding Fee Exists. Pay fine first: ",13);
 		actual = outputHandler.renew("Zhibo@carleton.ca,9781611687910,1");
 		assertEquals(expected.getState(), actual.getState());
 		assertEquals(expected.getOutput(), actual.getOutput());
@@ -419,7 +419,7 @@ public class OutputHandlerTest {
 	
 	@Test
 	public void clerkLoginTests() {
-		Output expected = new Output("What can I do for you?Menu:Create User/Title/Item,Delete User/Title/Item.", 2);
+		Output expected = new Output("What can I do for you?Menu:Create User/Title/Item,Delete User/Title/Item,Monitor.", 2);
 		Output actual = outputHandler.clerkLogin("admin");
 		assertEquals(expected.getState(), actual.getState());
 		assertEquals(expected.getOutput(), actual.getOutput());

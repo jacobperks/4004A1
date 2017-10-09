@@ -110,10 +110,12 @@ public class OutputHandler {
         	result=ItemTable.getInstance().createitem(strArray[0]);
         	if(result.equals(true)){
         		output.setOutput("Success!");
+        		output.setState(CLERK);
         	}else{
-        		output.setOutput("The Title Does Not Exists!");
+        		output.setOutput("The Title Does Not Exist! Create a title first:");
+        		output.setState(CREATETITLE);
         	}
-        	output.setState(CLERK);
+        	
         }
 		return output;
 	}
@@ -130,7 +132,7 @@ public class OutputHandler {
         	output.setState(DELETEUSER);
         }else if(userid==-1){
         	output.setOutput("The User Does Not Exist!");
-        	output.setState(DELETEUSER);
+        	output.setState(CLERK);
         }else{
         	result=UserTable.getInstance().delete(userid);
         	if(result.equals("success")){
@@ -214,11 +216,16 @@ public class OutputHandler {
         		result=LoanTable.getInstance().createloan(userid, strArray[1], strArray[2], new Date());
         		if(result.equals("success")){
             		output.setOutput("Success!");
+            		output.setState(USER);
+            	}else if (result.equals("Outstanding Fee Exists")) {
+            		output.setOutput(result+". Pay fine first: ");
+            		output.setState(PAYFINE);
             	}else{
             		output.setOutput(result+"!");
+            		output.setState(USER);
             	}
         	}
-        	output.setState(USER);
+        	
         }
 		return output;
 	}
@@ -246,11 +253,15 @@ public class OutputHandler {
         		result=LoanTable.getInstance().renewal(userid, strArray[1], strArray[2], new Date());
         		if(result.equals("success")){
             		output.setOutput("Success!");
+            		output.setState(USER);
+        		}else if (result.equals("Outstanding Fee Exists")) {
+            		output.setOutput(result+". Pay fine first: ");
+            		output.setState(PAYFINE);
             	}else{
             		output.setOutput(result+"!");
+            		output.setState(USER);
             	}
         	}
-        	output.setState(USER);
         }
 		return output;
 	}
