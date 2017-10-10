@@ -76,7 +76,10 @@ public class UserTable {
 			}
 		}
 		if(flag==0){
+			logger.info(String.format("Operation:Lookup user; Info: Does not exist"));
 			result=false;
+		} else {
+			logger.info(String.format("Operation:Lookup user; Info: Exists"));
 		}
 		return result;
 	}
@@ -152,6 +155,7 @@ public class UserTable {
 			}
 		}
 		users += "]";
+		logger.info(String.format("Operation:Monitor users successful;"));
 		return users;
 	}
 }

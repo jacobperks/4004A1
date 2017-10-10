@@ -38,9 +38,11 @@ public class FineTable {
 				}
 			}	
 		}else{
+			logger.info(String.format("Operation:Check fee FeeTable;FeeTable: No fee"));
 			fee=0;
 		}
 		if(fee!=0){
+			logger.info(String.format("Operation:Check fee FeeTable;FeeTable: %s", fee));
 			result=false;
 		}
 		return result;

@@ -66,7 +66,10 @@ public class LoanTable {
 			}
 		}
 		if(flag!=0){
+			logger.info(String.format("Operation:Lookup loan;Info: Exists"));
 			result=false;
+		} else {
+			logger.info(String.format("Operation:Lookup loan;Info: Does not exist"));
 		}
 		return result;
 	}

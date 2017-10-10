@@ -60,7 +60,10 @@ public class TitleTable {
 			}
 		}
 		if(flag==0){
+			logger.info(String.format("Operation:Lookup title; Info: Does not exist"));
 			result=false;
+		} else {
+			logger.info(String.format("Operation:Lookup title; Info: Exists"));
 		}
 		return result;
 	}
@@ -111,6 +114,7 @@ public class TitleTable {
 			}
 		}
 		titles += "]";
+		logger.info(String.format("Operation:Monitor titles successful;"));
 		return titles;
 	}
 

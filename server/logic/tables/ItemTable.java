@@ -63,7 +63,10 @@ public class ItemTable {
 			}
 		}
 		if(flag==0){
+			logger.info(String.format("Operation:Lookup item;Info: Does not exist"));
 			result=false;
+		} else {
+			logger.info(String.format("Operation:Lookup item;Info: Exists"));
 		}
 		return result;
 	}
